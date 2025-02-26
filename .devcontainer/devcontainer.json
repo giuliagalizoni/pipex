@@ -2,10 +2,14 @@
 	"name": "My Codespace",
 	"image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04",
 	"postCreateCommand": "sudo apt update sudo apt install python3-pip && sudo apt-get install -y bc valgrind && sudo python3 -m pip install --upgrade pip setuptools && sudo python3 -m pip install norminette",
-	"extensions": [
-		"ms-python.python"
-	],
-	"settings": {
-		"python.pythonPath": "/usr/local/bin/python3"
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"python.pythonPath": "/usr/local/bin/python3"
+			}
+		},
+				"extensions": [
+					"ms-python.python"
+				]
 	}
 }
