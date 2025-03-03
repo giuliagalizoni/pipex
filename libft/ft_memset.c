@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 12:09:57 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/03 15:14:05 by ggalizon         ###   ########.fr       */
+/*   Created: 2024/11/08 12:05:53 by ggalizon          #+#    #+#             */
+/*   Updated: 2024/11/26 10:52:50 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include "../libft/libft.h"
+void	*ft_memset(void *b, int c, size_t len)
+{
+	unsigned char	*str;
 
-
-int	check_arguments(int argc, char **argv);
-char	*get_path(char *cmd, char **env);
-
-
-
-#endif
+	str = b;
+	while (len)
+	{
+		*str = (unsigned char)c;
+		str++;
+		len--;
+	}
+	return (b);
+}

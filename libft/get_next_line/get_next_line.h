@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 12:09:57 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/03 15:14:05 by ggalizon         ###   ########.fr       */
+/*   Created: 2024/12/16 15:03:56 by ggalizon          #+#    #+#             */
+/*   Updated: 2025/01/17 12:45:36 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include "../libft/libft.h"
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
+# include <unistd.h>
+# include <stdlib.h>
+# include "../libft.h"
 
-int	check_arguments(int argc, char **argv);
-char	*get_path(char *cmd, char **env);
-
-
+char		*get_next_line(int fd);
 
 #endif

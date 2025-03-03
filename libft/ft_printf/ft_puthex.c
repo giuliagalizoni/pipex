@@ -1,32 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_puthex.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 12:09:57 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/03 15:14:05 by ggalizon         ###   ########.fr       */
+/*   Created: 2024/12/03 11:23:31 by ggalizon          #+#    #+#             */
+/*   Updated: 2024/12/05 13:33:56 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "ft_printf.h"
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include "../libft/libft.h"
+int	ft_puthex(unsigned int n, char c)
+{
+	char	d;
+	int		len;
+	int		re;
 
-
-int	check_arguments(int argc, char **argv);
-char	*get_path(char *cmd, char **env);
-
-
-
-#endif
+	len = 0;
+	if (n > 15)
+	{
+		re = ft_puthex(n / 16, c);
+		if (re == -1)
+			return (re);
+		len += re;
+	}
+	n = n % 16;
+	if (n < 10)
+		d = n + '0';
+	else
+	{
+		d = n + 87;
+		if (c == 'X')
+			d -= 32;
+	}
+	re = write(1, &d, 1);
+	if (re == -1)
+		return (re);
+	return (len + 1);
+}

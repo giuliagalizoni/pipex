@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_lstiter.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 12:09:57 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/03 15:14:05 by ggalizon         ###   ########.fr       */
+/*   Created: 2024/11/05 12:34:21 by ggalizon          #+#    #+#             */
+/*   Updated: 2024/11/25 11:35:06 by ggalizon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include "../libft/libft.h"
-
-
-int	check_arguments(int argc, char **argv);
-char	*get_path(char *cmd, char **env);
-
-
-
-#endif
+void	ft_lstiter(t_list *lst, void (*f)(void*))
+{
+	if (!lst || !f)
+		return ;
+	while (lst)
+	{
+		(*f)(lst->content);
+		lst = lst->next;
+	}
+}
