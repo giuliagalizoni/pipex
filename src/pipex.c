@@ -3,39 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:08:51 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/03 15:13:45 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/03/04 10:13:07 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
 
-
-int	execute(char *cmd, char **env)
+int	execute(t_pipex *pipex, char *cmd, char **env)
 {
-	char	**cmd_arr;
-	char	*path;
-
-	cmd_arr = ft_split(cmd, ' ');
-	if (!cmd_arr)
-		return 1;
-	path = get_path(cmd_arr[0], env);
-	if (!path)
+	pipex->cmd_arr = ft_split(cmd, ' ');
+	if (!pipex->cmd_arr)
+		return (1);
+	pipex->path = get_path(pipex->cmd_arr[0], env);
+	if (!pipex->path)
 	{
 		ft_printf("Error: command not found\n");
-		return 1;
+		return (1);
 	}
-	if (execve(path, cmd_arr, env) == -1)
+	if (execve(pipex->path, pipex->cmd_arr, env) == -1)
 	{
+		cleanup(pipex);
 		ft_printf("Error: %s\n", strerror(errno));
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }
 
-int child(int *fd, char **argv, char **env)
+int	child(t_pipex *pipex, char **argv, char **env)
 {
 	int	fd_file;
 
@@ -45,17 +42,21 @@ int child(int *fd, char **argv, char **env)
 		ft_printf("Error: %s\n", strerror(errno));
 		exit(1);
 	}
-	ft_printf("Im the child process\n");
 	dup2(fd_file, 0);
-	dup2(fd[1], 1);
-	close(fd[0]);
+	dup2(pipex->fd[1], 1);
+	close(pipex->fd[0]);
 	close(fd_file);
-	close(fd[1]);
-	execute(argv[2], env);
+	close(pipex->fd[1]);
+	if (execute(pipex, argv[2], env))
+	{
+		cleanup(pipex);
+		ft_printf("Error: %s\n", strerror(errno));
+		exit(1);
+	}
 	return (0);
 }
 
-int	parent(int *fd, char **argv, char **env)
+int	parent(t_pipex *pipex, char **argv, char **env)
 {
 	int	fd_file;
 
@@ -65,20 +66,19 @@ int	parent(int *fd, char **argv, char **env)
 		ft_printf("Error: %s\n", strerror(errno));
 		exit(1);
 	}
-	ft_printf("Im the parent process\n");
-	dup2(fd[0], 0);
+	dup2(pipex->fd[0], 0);
 	dup2(fd_file, 1);
-	close(fd[1]);
-	close(fd[0]);
+	close(pipex->fd[1]);
+	close(pipex->fd[0]);
 	close(fd_file);
-	if (!execute(argv[3], env))
+	if (execute(pipex, argv[3], env))
 	{
+		cleanup(pipex);
 		ft_printf("Error: %s\n", strerror(errno));
 		exit(1);
 	}
 	return (0);
 }
-
 
 // MAIN
 // initiate the fd
@@ -96,23 +96,26 @@ int	parent(int *fd, char **argv, char **env)
 // if error, print error and cleanup
 
 // fd[0] - read | fd[1] - write
-int	main(int argc, char** argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	int	fd[2];
-	int pid;
+	t_pipex	pipex;
+	// int	fd[2];
+	// int	pid;
 
 	check_arguments(argc, argv);
-	if (pipe(fd) == -1) {
-		ft_printf("An error occurred"); //error management
-		return 1;
+	pipex.pipe = pipe(pipex.fd);
+	if (pipex.pipe == -1)
+	{
+		ft_printf("An error occurred");
+		return (1);
 	}
-	pid = fork();
-	if (pid == 0)
-		child(fd, argv, env);
+	pipex.pid = fork();
+	if (pipex.pid == 0)
+		child(&pipex, argv, env);
 	else
 	{
-		waitpid(pid, NULL, 0);
-		parent(fd, argv, env);
+		waitpid(pipex.pid, NULL, 0);
+		parent(&pipex, argv, env);
 	}
-	return 0;
+	return (0);
 }

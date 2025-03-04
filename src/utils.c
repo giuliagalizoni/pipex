@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggalizon <ggalizon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:09:02 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/03 15:38:19 by ggalizon         ###   ########.fr       */
+/*   Updated: 2025/03/04 10:04:40 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,37 @@ int	check_arguments(int argc, char **argv)
 	{
 		ft_printf("Error: wrong number of arguments\n");
 		exit(1);
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }
 
-void free_paths(char **paths)
+void	free_arr(char **arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (paths[i])
-		free(paths[i++]);
-	free(paths);
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
 }
 
-char *get_command(char **paths, char *cmd)
+char	*get_command(char **paths, char *cmd)
 {
-	char *full_cmd;
-	char *temp;
-	int i;
+	char	*full_cmd;
+	char	*temp;
+	int		i;
 
 	i = 0;
 	while (paths[i])
 	{
 		temp = ft_strjoin(paths[i], "/");
 		if (!temp)
-			return NULL;
+			return (NULL);
 		full_cmd = ft_strjoin(temp, cmd);
 		free(temp);
 		if (access(full_cmd, X_OK) == 0)
-			return (free_paths(paths), full_cmd);
+			return (free_arr(paths), full_cmd);
 		free(full_cmd);
 		i++;
 	}
@@ -58,8 +58,7 @@ char *get_command(char **paths, char *cmd)
 char	*get_path(char *cmd, char **env)
 {
 	char	*path_env;
-    char	**paths;
-
+	char	**paths;
 
 	while (*env)
 	{
@@ -68,11 +67,23 @@ char	*get_path(char *cmd, char **env)
 			path_env = *env + 5;
 			paths = ft_split(path_env, ':');
 			if (!paths)
-				return NULL;
-			return get_command(paths, cmd);
-			free_paths(paths);
+				return (NULL);
+			return (get_command(paths, cmd));
+			free_arr(paths);
 		}
 		env++;
 	}
-	return NULL;
+	return (NULL);
+}
+
+void	cleanup(t_pipex *pipex)
+{
+	if (pipex->fd[0])
+		close(pipex->fd[0]);
+	if (pipex->fd[1])
+		close(pipex->fd[1]);
+	if (pipex->cmd_arr)
+		free_arr(pipex->cmd_arr);
+	if (pipex->path)
+		free(pipex->path);
 }
