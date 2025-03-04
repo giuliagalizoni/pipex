@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:08:51 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/04 10:13:07 by vscode           ###   ########.fr       */
+/*   Updated: 2025/03/04 10:40:12 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,14 @@ int	execute(t_pipex *pipex, char *cmd, char **env)
 	pipex->path = get_path(pipex->cmd_arr[0], env);
 	if (!pipex->path)
 	{
-		ft_printf("Error: command not found\n");
+		cleanup(pipex);
+		ft_putstr_fd("Error: command not found\n", 2);
 		return (1);
 	}
 	if (execve(pipex->path, pipex->cmd_arr, env) == -1)
 	{
 		cleanup(pipex);
-		ft_printf("Error: %s\n", strerror(errno));
+		ft_putstr_fd(strerror(errno), 2);
 		return (1);
 	}
 	return (0);
@@ -39,7 +40,8 @@ int	child(t_pipex *pipex, char **argv, char **env)
 	fd_file = open(argv[1], O_RDONLY);
 	if (fd_file == -1)
 	{
-		ft_printf("Error: %s\n", strerror(errno));
+		cleanup(pipex);
+		ft_putstr_fd(strerror(errno), 2);
 		exit(1);
 	}
 	dup2(fd_file, 0);
@@ -50,7 +52,7 @@ int	child(t_pipex *pipex, char **argv, char **env)
 	if (execute(pipex, argv[2], env))
 	{
 		cleanup(pipex);
-		ft_printf("Error: %s\n", strerror(errno));
+		ft_putstr_fd(strerror(errno), 2);
 		exit(1);
 	}
 	return (0);
@@ -63,7 +65,8 @@ int	parent(t_pipex *pipex, char **argv, char **env)
 	fd_file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_file == -1)
 	{
-		ft_printf("Error: %s\n", strerror(errno));
+		cleanup(pipex);
+		ft_putstr_fd(strerror(errno), 2);
 		exit(1);
 	}
 	dup2(pipex->fd[0], 0);
@@ -74,7 +77,7 @@ int	parent(t_pipex *pipex, char **argv, char **env)
 	if (execute(pipex, argv[3], env))
 	{
 		cleanup(pipex);
-		ft_printf("Error: %s\n", strerror(errno));
+		ft_putstr_fd(strerror(errno), 2);
 		exit(1);
 	}
 	return (0);
@@ -99,14 +102,16 @@ int	parent(t_pipex *pipex, char **argv, char **env)
 int	main(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
-	// int	fd[2];
-	// int	pid;
 
+	pipex.cmd_arr = NULL;
+	pipex.pid = 0;
+	pipex.pipe = 0;
+	pipex.path = NULL;
 	check_arguments(argc, argv);
 	pipex.pipe = pipe(pipex.fd);
 	if (pipex.pipe == -1)
 	{
-		ft_printf("An error occurred");
+		ft_putstr_fd(strerror(errno), 2);
 		return (1);
 	}
 	pipex.pid = fork();

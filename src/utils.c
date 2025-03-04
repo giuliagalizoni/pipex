@@ -6,7 +6,7 @@
 /*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:09:02 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/04 10:04:40 by vscode           ###   ########.fr       */
+/*   Updated: 2025/03/04 10:47:40 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ void	free_arr(char **arr)
 {
 	int	i;
 
+	if (!arr)
+		return ;
 	i = 0;
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);
+	arr = NULL;
 }
 
 char	*get_command(char **paths, char *cmd)
@@ -48,10 +51,14 @@ char	*get_command(char **paths, char *cmd)
 		full_cmd = ft_strjoin(temp, cmd);
 		free(temp);
 		if (access(full_cmd, X_OK) == 0)
-			return (free_arr(paths), full_cmd);
+		{
+			free_arr(paths);
+			return (full_cmd);
+		}
 		free(full_cmd);
 		i++;
 	}
+	free_arr(paths);
 	return (NULL);
 }
 
@@ -83,7 +90,13 @@ void	cleanup(t_pipex *pipex)
 	if (pipex->fd[1])
 		close(pipex->fd[1]);
 	if (pipex->cmd_arr)
+	{
 		free_arr(pipex->cmd_arr);
+		pipex->cmd_arr = NULL;
+	}
 	if (pipex->path)
+	{
 		free(pipex->path);
+		pipex->path = NULL;
+	}
 }
