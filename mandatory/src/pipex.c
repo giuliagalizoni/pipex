@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:08:51 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/04 10:40:12 by vscode           ###   ########.fr       */
+/*   Updated: 2025/03/05 10:26:00 by giuliagaliz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	main(int argc, char **argv, char **env)
 	pipex.pid = 0;
 	pipex.pipe = 0;
 	pipex.path = NULL;
-	check_arguments(argc, argv);
+	check_arguments(argc);
 	pipex.pipe = pipe(pipex.fd);
 	if (pipex.pipe == -1)
 	{

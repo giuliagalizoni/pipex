@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:09:02 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/04 10:47:40 by vscode           ###   ########.fr       */
+/*   Updated: 2025/03/05 10:26:02 by giuliagaliz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/pipex.h"
 
-int	check_arguments(int argc, char **argv)
+int	check_arguments(int argc)
 {
 	if (argc != 5)
 	{

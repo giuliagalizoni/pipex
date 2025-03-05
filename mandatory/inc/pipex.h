@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
+/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:09:57 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/04 10:14:42 by vscode           ###   ########.fr       */
+/*   Updated: 2025/03/05 10:26:21 by giuliagaliz      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/stat.h>
 # include <errno.h>
 # include <fcntl.h>
-# include "../libft/libft.h"
+# include "../../libft/libft.h"
 
 typedef struct s_pipex
 {
@@ -33,7 +33,7 @@ typedef struct s_pipex
 
 }	t_pipex;
 
-int		check_arguments(int argc, char **argv);
+int		check_arguments(int argc);
 char	*get_path(char *cmd, char **env);
 void	free_arr(char **arr);
 void	cleanup(t_pipex *pipex);
