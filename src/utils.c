@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:09:02 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/05 10:26:02 by giuliagaliz      ###   ########.fr       */
+/*   Updated: 2025/03/05 10:07:37 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*get_command(char **paths, char *cmd)
 	char	*temp;
 	int		i;
 
+	if (!cmd || !*cmd)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
@@ -67,6 +69,8 @@ char	*get_path(char *cmd, char **env)
 	char	*path_env;
 	char	**paths;
 
+	if (!cmd || !*cmd)
+		return (NULL);
 	while (*env)
 	{
 		if (ft_strncmp(*env, "PATH=", 5) == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: giuliagalizoni <giuliagalizoni@student.    +#+  +:+       +#+        */
+/*   By: vscode <vscode@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:08:51 by ggalizon          #+#    #+#             */
-/*   Updated: 2025/03/05 10:26:00 by giuliagaliz      ###   ########.fr       */
+/*   Updated: 2025/03/06 15:50:04 by vscode           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	execute(t_pipex *pipex, char *cmd, char **env)
 	{
 		cleanup(pipex);
 		ft_putstr_fd("Error: command not found\n", 2);
-		return (1);
+		exit(127);
 	}
 	if (execve(pipex->path, pipex->cmd_arr, env) == -1)
 	{
@@ -83,22 +83,6 @@ int	parent(t_pipex *pipex, char **argv, char **env)
 	return (0);
 }
 
-// MAIN
-// initiate the fd
-// initiate the pid
-// check arguments
-// create a pipe and check
-// fork the process and check
-// if the process is a child, call child()
-// if the process is a parent, call parent()
-
-// EXECUTION
-// split the command
-// get the path
-// call execve and check
-// if error, print error and cleanup
-
-// fd[0] - read | fd[1] - write
 int	main(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
@@ -122,5 +106,6 @@ int	main(int argc, char **argv, char **env)
 		waitpid(pipex.pid, NULL, 0);
 		parent(&pipex, argv, env);
 	}
+	close(pipex.pipe);
 	return (0);
 }

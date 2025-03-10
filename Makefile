@@ -6,16 +6,11 @@ CFLAGS = -Wall -Wextra -Werror
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
-
-MANDATORY_DIR = ./mandatory
-BONUS_DIR = ./bonus
-SRC_DIR = /src
+SRC_DIR = ./src
 
 SRCS = \
-	$(MANDATORY_DIR)$(SRC_DIR)/pipex.c \
-	$(MANDATORY_DIR)$(SRC_DIR)/utils.c \
-
-BONUS_SRCS = \
+	$(SRC_DIR)/pipex.c \
+	$(SRC_DIR)/utils.c \
 
 OBJS = $(SRCS:.c=.o)
 BONUS_OBJS = $(BONUS_SRCS:.c=.o)
@@ -37,8 +32,6 @@ $(NAME): $(OBJS)
 	@echo "$(YELLOW)Compiling $(NAME)...$(RESET)"
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 
-bonus: $(LIBFT) $(NAME_BONUS)
-	@echo "$(GREEN)$(NAME_BONUS) is ready!$(RESET)"
 
 $(NAME_BONUS): $(BONUS_OBJS)
 	@echo "$(YELLOW)Compiling $(NAME_BONUS)...$(RESET)"
